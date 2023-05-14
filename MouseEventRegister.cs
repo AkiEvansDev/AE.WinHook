@@ -22,6 +22,7 @@ public static class MouseEventRegister
         public MouseEventType EventType { get; set; }
         public Action<int, int> Action { get; set; }
         public bool Handled { get; set; }
+        public bool Saved { get; set; }
     }
 
     private static readonly List<MouseEvent> MouseEvents = new();
@@ -39,7 +40,7 @@ public static class MouseEventRegister
         return false;
     }
 
-    public static bool RegMouseEvent(MouseButtonType buttonType, MouseEventType eventType, Action<int, int> action, bool handled = false)
+    public static bool RegMouseEvent(MouseButtonType buttonType, MouseEventType eventType, Action<int, int> action, bool handled = false, bool saved = false)
     {
         var mouseEvent = new MouseEvent
         {
@@ -47,10 +48,11 @@ public static class MouseEventRegister
             EventType = eventType,
             Action = action,
             Handled = handled,
+            Saved = saved,
         };
 
         var duplicateMouseEvent = MouseEvents.FirstOrDefault(me => me.ButtonType == buttonType && me.EventType == eventType);
-        if (duplicateMouseEvent != null)
+        if (duplicateMouseEvent != null && !duplicateMouseEvent.Saved)
         {
             duplicateMouseEvent.Action = action;
             duplicateMouseEvent.Handled = handled;
@@ -90,8 +92,10 @@ public static class MouseEventRegister
 
     public static bool UnregAllHotKey()
     {
-        MouseEvents.Clear();
-        MouseHook.Stop();
+        MouseEvents.RemoveAll(me => !me.Saved);
+
+        if (!MouseEvents.Any())
+            MouseHook.Stop();
 
         return true;
     }

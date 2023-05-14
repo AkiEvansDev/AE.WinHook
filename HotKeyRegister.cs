@@ -51,6 +51,7 @@ public static class HotKeyRegister
         public string Keys { get; set; }
         public Action Action { get; set; }
         public bool Handled { get; set; }
+        public bool Saved { get; set; }
 
         public override string ToString()
         {
@@ -81,12 +82,12 @@ public static class HotKeyRegister
         return result;
     }
 
-    public static bool RegHotKey(KeyModifiers keyModifiers, Key key, Action action, bool handled = true)
+    public static bool RegHotKey(KeyModifiers keyModifiers, Key key, Action action, bool handled = true, bool saved = false)
     {
-        return RegHotKey(keyModifiers, new List<Key> { key }, action, handled);
+        return RegHotKey(keyModifiers, new List<Key> { key }, action, handled, saved);
     }
 
-    public static bool RegHotKey(KeyModifiers keyModifiers, IEnumerable<Key> keys, Action action, bool handled = true)
+    public static bool RegHotKey(KeyModifiers keyModifiers, IEnumerable<Key> keys, Action action, bool handled = true, bool saved = false)
     {
         var hotKey = new HotKey
         {
@@ -94,10 +95,11 @@ public static class HotKeyRegister
             Keys = string.Join('+', keys),
             Action = action,
             Handled = handled,
+            Saved = saved,
         };
 
         var duplicateHotKey = HotKeys.FirstOrDefault(hk => hk.Modifiers == hotKey.Modifiers && hk.Keys == hotKey.Keys);
-        if (duplicateHotKey != null)
+        if (duplicateHotKey != null && !duplicateHotKey.Saved)
         {
             duplicateHotKey.Action = action;
             duplicateHotKey.Handled = handled;
@@ -150,8 +152,10 @@ public static class HotKeyRegister
 
     public static bool UnregAllHotKey()
     {
-        HotKeys.Clear();
-        KeyboardHook.Stop();
+        HotKeys.RemoveAll(hk => !hk.Saved);
+
+        if (!HotKeys.Any())
+            KeyboardHook.Stop();
 
         return true;
     }
