@@ -90,7 +90,7 @@ public static class MouseEventRegister
         return false;
     }
 
-    public static bool UnregAllHotKey()
+    public static bool UnregAllMouseEvent()
     {
         MouseEvents.RemoveAll(me => !me.Saved);
 
