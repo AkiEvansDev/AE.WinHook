@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Runtime.InteropServices;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AE.WinHook.Hook;
@@ -37,19 +36,19 @@ public class KeyboardHook : BaseHook
             var key = KeyInterop.KeyFromVirtualKey(keyboardHookStruct.vkCode);
 
             // Is Control
-            if ( ((GetKeyState(VK_LCONTROL) & 0x80) != 0) || ((GetKeyState(VK_RCONTROL) & 0x80) != 0) )
+            if (((GetKeyState(VK_LCONTROL) & 0x80) != 0) || ((GetKeyState(VK_RCONTROL) & 0x80) != 0))
                 keyModifiers |= KeyModifiers.Control;
 
             // Is Alt
-            if ( ((GetKeyState(VK_LALT) & 0x80) != 0) || ((GetKeyState(VK_RALT) & 0x80) != 0) )
+            if (((GetKeyState(VK_LALT) & 0x80) != 0) || ((GetKeyState(VK_RALT) & 0x80) != 0))
                 keyModifiers |= KeyModifiers.Alt;
 
             // Is Shift
-            if ( ((GetKeyState(VK_LSHIFT) & 0x80) != 0) || ((GetKeyState(VK_RSHIFT) & 0x80) != 0))
+            if (((GetKeyState(VK_LSHIFT) & 0x80) != 0) || ((GetKeyState(VK_RSHIFT) & 0x80) != 0))
                 keyModifiers |= KeyModifiers.Shift;
 
             // Is Win
-            if ( ((GetKeyState(VK_LWIN) & 0x80) != 0) || ((GetKeyState(VK_LWIN - VK_RWIN) & 0x80) != 0) )
+            if (((GetKeyState(VK_LWIN) & 0x80) != 0) || ((GetKeyState(VK_LWIN - VK_RWIN) & 0x80) != 0))
                 keyModifiers |= KeyModifiers.Win;
 
             var handled = false;

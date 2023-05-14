@@ -1,4 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 
 using AE.WinHook.Hook;
 
@@ -72,7 +75,7 @@ public static class HotKeyRegister
         var result = false;
         var keysString = string.Join('+', PressKeys);
 
-        foreach (var hotKey in HotKeys.Where(hk => hk.Modifiers == keyModifiers))
+        foreach (var hotKey in HotKeys.ToList().Where(hk => hk.Modifiers == keyModifiers))
             if (hotKey.Keys == keysString)
             {
                 hotKey.Action?.Invoke();
