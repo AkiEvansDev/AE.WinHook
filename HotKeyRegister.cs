@@ -55,6 +55,15 @@ public static class HotKeyRegister
         public Action Action { get; set; }
         public bool Handled { get; set; }
         public bool Saved { get; set; }
+        public bool Strong { get; set; }
+
+        public bool Compare(string keys)
+        {
+            if (Strong)
+                return Keys == keys;
+
+            return Keys.Split('+').All(k => keys.Contains(k));
+        }
 
         public override string ToString()
         {
@@ -76,21 +85,23 @@ public static class HotKeyRegister
         var keysString = string.Join('+', PressKeys);
 
         foreach (var hotKey in HotKeys.ToList().Where(hk => hk.Modifiers == keyModifiers))
-            if (hotKey.Keys == keysString)
+        {
+            if (hotKey.Compare(keysString))
             {
                 hotKey.Action?.Invoke();
                 result = hotKey.Handled || result;
             }
+        }
 
         return result;
     }
 
-    public static bool RegHotKey(KeyModifiers keyModifiers, Key key, Action action, bool handled = true, bool saved = false)
+    public static bool RegHotKey(KeyModifiers keyModifiers, Key key, Action action, bool handled = true, bool saved = false, bool strong = true)
     {
-        return RegHotKey(keyModifiers, new List<Key> { key }, action, handled, saved);
+        return RegHotKey(keyModifiers, new List<Key> { key }, action, handled, saved, strong);
     }
 
-    public static bool RegHotKey(KeyModifiers keyModifiers, IEnumerable<Key> keys, Action action, bool handled = true, bool saved = false)
+    public static bool RegHotKey(KeyModifiers keyModifiers, IEnumerable<Key> keys, Action action, bool handled = true, bool saved = false, bool strong = true)
     {
         var hotKey = new HotKey
         {
@@ -99,6 +110,7 @@ public static class HotKeyRegister
             Action = action,
             Handled = handled,
             Saved = saved,
+            Strong = strong,
         };
 
         var duplicateHotKey = HotKeys.FirstOrDefault(hk => hk.Modifiers == hotKey.Modifiers && hk.Keys == hotKey.Keys);
@@ -106,6 +118,8 @@ public static class HotKeyRegister
         {
             duplicateHotKey.Action = action;
             duplicateHotKey.Handled = handled;
+            duplicateHotKey.Saved = saved;
+            duplicateHotKey.Strong = strong;
         }
         else
         {
