@@ -10,12 +10,13 @@ namespace AE.WinHook;
 public static class HotKeyRegister
 {
     private static readonly KeyboardHook KeyboardHook = new();
+    private static readonly MouseHook MouseHook = new();
 
-    static HotKeyRegister()
+	static HotKeyRegister()
     {
         KeyboardHook.KeyDown = OnHookKeyDown;
         KeyboardHook.KeyUp = OnHookKeyUp;
-    }
+	}
 
     private static readonly List<Key> PressKeys = new();
 
@@ -132,9 +133,7 @@ public static class HotKeyRegister
                 throw new Exception($"Hot key `{hotKey}` coincides with `{duplicateHotKey}`!");
 
             HotKeys.Add(hotKey);
-
-            if (!KeyboardHook.IsStarted)
-                KeyboardHook.Start();
+            KeyboardHook.Start();
         }
 
         return true;
@@ -176,5 +175,17 @@ public static class HotKeyRegister
 
         return true;
     }
+
+    public static void SetMouseHook(OnHookMouse action)
+    {
+		MouseHook.MouseEvent = action;
+		MouseHook.Start();
+	}
+
+	public static void ClearMouseHook()
+	{
+		MouseHook.Stop();
+		MouseHook.MouseEvent = null;
+	}
 }
 

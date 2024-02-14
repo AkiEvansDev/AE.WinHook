@@ -113,9 +113,12 @@ public abstract class BaseHook
 
     public void Start()
     {
+        if (IsStarted)
+            return;
+
         Application.Current.Dispatcher.Invoke(() =>
         {
-            if (!IsStarted && HookType != 0)
+            if (HookType != 0)
             {
                 HookCallback = new HookProc(HookCallbackProcedure);
 
@@ -134,13 +137,13 @@ public abstract class BaseHook
 
     public void Stop()
     {
+        if (!IsStarted)
+            return;
+
         Application.Current.Dispatcher.Invoke(() =>
         {
-            if (IsStarted)
-            {
-                _ = UnhookWindowsHookEx(HandleToHook);
-                IsStarted = false;
-            }
+            _ = UnhookWindowsHookEx(HandleToHook);
+            IsStarted = false;
         });
     }
 
