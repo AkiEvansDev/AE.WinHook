@@ -1,23 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-	<UseWPF>true</UseWPF>
+    <TargetFramework>netstandard2.1</TargetFramework>
 
-	<Version>2.0.3</Version>
-	<Title>AE.WinHook</Title>
-	<Description>AE.WinHook</Description>
+	<Version>1.0.1</Version>
+	<Title>AE.Dal</Title>
+	<Description>AE.Dal</Description>
 	<Authors>AkiEvans</Authors>
-	<PackageTags>AE.WinHook;</PackageTags>
+	<PackageTags>AE.Dal;</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<RepositoryType>git</RepositoryType>
 	<RepositoryUrl>https://github.com/AkiEvansDev/AE.WinHook</RepositoryUrl>
 	<PackageProjectUrl>https://github.com/AkiEvansDev/AE.WinHook</PackageProjectUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-	<None Remove=".gitattributes" />
-	<None Remove=".gitignore" />
-  </ItemGroup>
-	
 </Project>
