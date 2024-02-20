@@ -8,6 +8,17 @@ using AE.Dal;
 
 namespace AE.WinHook;
 
+public struct MonitorInfo
+{
+	public Rectangle Monitor { get; set; }
+	public Rectangle Work { get; set; }
+
+	internal MonitorInfo(MONITORINFO info)
+	{
+		Monitor = info.rcMonitor.Rectangle;
+		Work = info.rcWork.Rectangle;
+	}
+}
 
 [StructLayout(LayoutKind.Sequential)]
 internal struct POINT
@@ -305,14 +316,14 @@ public static class WinHelper
 		return rect.Rectangle;
 	}
 
-	public static Size GetMonitorSize(IntPtr window)
+	public static MonitorInfo GetMonitorInfo(IntPtr window)
 	{
 		var monitor = MonitorFromWindow(window, MONITOR_DEFAULTTONEAREST);
 
 		var info = new MONITORINFO();
 		GetMonitorInfo(new HandleRef(null, monitor), info);
 
-		return info.rcMonitor.Size;
+		return new MonitorInfo(info);
 	}
 
 	public static void SetWindowPos(IntPtr window, int x, int y)
