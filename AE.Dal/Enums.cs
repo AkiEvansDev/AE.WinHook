@@ -123,29 +123,27 @@ namespace AE.Dal
 
 		[Description("- _")]
 		Minus = 0xBD,
-		[Description("+ =")]
+		[Description("= +")]
 		Plus = 0xBB,
-		[Description("< ,")]
+		[Description(", <")]
 		Comma = 0xBC,
-		[Description("> .")]
+		[Description(". >")]
 		Period = 0xBE,
 
-		[Description(": ;")]
+		[Description("; :")]
 		Oem1 = 0xBA,
-		[Description("? /")]
+		[Description("/ ?")]
 		Oem2 = 0xBF,
-		[Description("~ `")]
+		[Description("` ~")]
 		Oem3 = 0xC0,
-		[Description("{ [")]
+		[Description("[ {")]
 		Oem4 = 0xDB,
-		[Description("| \\")]
+		[Description("\\ |")]
 		Oem5 = 0xDC,
-		[Description("} ]")]
+		[Description("] }")]
 		Oem6 = 0xDD,
-		[Description("\" '")]
+		[Description("' \"")]
 		Oem7 = 0xDE,
-		[Description("§ !")]
-		Oem8 = 0xDF,
 
 		[Description("Esc")]
 		Esc = 0x1B,
