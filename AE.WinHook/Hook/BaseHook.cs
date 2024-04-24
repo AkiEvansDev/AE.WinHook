@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace AE.WinHook.Hook;
 
@@ -64,36 +63,25 @@ public abstract class BaseHook
 
 	public bool IsStarted { get; private set; }
 
-	public BaseHook()
-	{
-		Application.Current.Dispatcher.Invoke(() =>
-		{
-			Application.Current.Exit += (s, e) => Stop();
-		});
-	}
-
 	public void Start()
 	{
 		if (IsStarted)
 			return;
 
-		Application.Current.Dispatcher.Invoke(() =>
+		if (HookType != 0)
 		{
-			if (HookType != 0)
-			{
-				HookCallback = new HookProc(HookCallbackProcedure);
+			HookCallback = new HookProc(HookCallbackProcedure);
 
-				HandleToHook = SetWindowsHookEx(
-					HookType,
-					HookCallback,
-					Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
-					0
-				);
+			HandleToHook = SetWindowsHookEx(
+				HookType,
+				HookCallback,
+				Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]),
+				0
+			);
 
-				if (HandleToHook != 0)
-					IsStarted = true;
-			}
-		});
+			if (HandleToHook != 0)
+				IsStarted = true;
+		}
 	}
 
 	public void Stop()
@@ -101,11 +89,8 @@ public abstract class BaseHook
 		if (!IsStarted)
 			return;
 
-		Application.Current.Dispatcher.Invoke(() =>
-		{
-			_ = UnhookWindowsHookEx(HandleToHook);
-			IsStarted = false;
-		});
+		_ = UnhookWindowsHookEx(HandleToHook);
+		IsStarted = false;
 	}
 
 	protected virtual int HookCallbackProcedure(int nCode, int wParam, IntPtr lParam)

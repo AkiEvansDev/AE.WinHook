@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 using AE.Dal;
 using AE.WinHook.Hook;
@@ -140,12 +139,12 @@ public static class HotKeyRegister
 		return true;
 	}
 
-	public static bool UnregHotKey(KeyModifiers keyModifiers, Key key)
+	public static bool UnregHotKey(KeyModifiers keyModifiers, Keys key)
 	{
-		return UnregHotKey(keyModifiers, new List<Key> { key });
+		return UnregHotKey(keyModifiers, new List<Keys> { key });
 	}
 
-	public static bool UnregHotKey(KeyModifiers keyModifiers, IEnumerable<Key> keys)
+	public static bool UnregHotKey(KeyModifiers keyModifiers, IEnumerable<Keys> keys)
 	{
 		var hotKey = new HotKey
 		{
